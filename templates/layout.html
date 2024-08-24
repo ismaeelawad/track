@@ -7,6 +7,16 @@
         </title>
         <link href="../static/styles.css" rel="stylesheet">
         <script>
+            var isSidebarOpen = false;
+            function sidebarToggle() {
+                if (isSidebarOpen)
+                    closeNav();
+                else
+                    openNav();
+
+                isSidebarOpen = !isSidebarOpen;
+            }
+
             function openNav() {
                 document.getElementById("distSidebar").style.width = "250px";
                 document.getElementById("main").style.marginLeft = "250px";
@@ -20,14 +30,13 @@
     </head>
     <body>
         <div id="distSidebar" class="sidebar">
-            <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             {% for dist in dists %}
                 <a href="#">{{ dist }}</a>
             {% endfor %}
             <a href="#">&plus; Add Distance</a>
         </div>
         <div id="TopBar" class="topbar">
-            <button class="openbtn" onclick="openNav()">&#9776; Distances</button>
+            <button class="openbtn" onclick="sidebarToggle()">&#9776; Distances</button>
         </div>
         <div id="main">
             {% block body %}{% endblock %}

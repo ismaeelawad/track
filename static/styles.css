@@ -16,11 +16,11 @@ body {
     width: 0;
     position: fixed;
     z-index: 1;
-    top: 50px;
+    top: 50px;;
     left: 0;
     background-color: rgb(238, 238, 238);
     overflow-x: hidden;
-    padding-top: 60px;
+    padding-top: 20px;
     transition: 0.5s;
 }
 
@@ -28,7 +28,7 @@ body {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
-    color: rgb(77, 175, 214);
+    color: rgb(57, 146, 182);
     display: block;
     transition: 0.3s;
 }
@@ -37,20 +37,12 @@ body {
     color: rgb(23, 62, 146);
 }
 
-.sidebar .closebtn {
-    position: absolute;
-    top: 0;
-    right: 25px;
-    font-size: 36px;
-    margin-left: 50px;
-}
-
 .openbtn {
     height: 100%;
     font-size: 20px;
     cursor: pointer;
     background-color: white;
-    color: rgb(77, 175, 214);
+    color: rgb(57, 146, 182);
     padding: 10px 15px;
     border: none;
 }
