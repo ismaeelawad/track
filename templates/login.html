@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block body %}
+    <h1>Log In</h1>
+        <form method="post" class="login_form">
+            <input type="text" name="username" placeholder="Username" autofocus autocomplete="off">
+            <input type="password" name="password" placeholder="Password" autocomplete="off">
+            <button type="submit">Log In</button>
+        </form>
+        <p style="text-align: center; font-size: 14pt;">or</p>
+        <a href="/register" style="text-decoration: none;">
+            <button class="register_button">Register New User</button>
+        </a>
+{% endblock %}
