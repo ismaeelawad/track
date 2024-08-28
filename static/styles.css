@@ -44,6 +44,43 @@ body {
     color: var(--dark_blue);
 }
 
+.adddistbutton input {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 14pt;
+    border: 0px;
+    border-radius: 0px;
+    background-color: white;
+    outline: none;
+    padding: 5px;
+    transition: .5s;
+}
+
+.adddistbutton input:focus {
+    background-color: var(--dark_gray);
+    color: white;
+    border: 0px;
+}
+
+.adddistbutton button {
+    background-color: var(--light_blue);
+    color: white;
+    font-size: 14pt;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    border: none;
+    transition: 0.5s;
+    padding: 5px;
+    margin-right: auto;
+    margin-left: auto;
+    margin-top: 5px;
+    position: relative;
+    display: block;
+}
+
+.adddistbutton button:hover {
+    background-color: var(--dark_blue);
+    color: white;
+}
+
 .openbtn {
     height: 100%;
     font-size: 20px;

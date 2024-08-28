@@ -30,12 +30,17 @@ def hash_password(password):
     hash_object = hashlib.sha256(password_bytes)
     return hash_object.hexdigest()
 
-
-dists = ["100m", "400m", "5K", "10K"]
+dists = []
+def load_dists():
+    rows = db.execute("SELECT distance FROM distances WHERE user_id = ?", session["user_id"])
+    for row in rows:
+        if row["distance"] not in dists:
+            dists.append(row["distance"])
 
 @app.route("/")
 @login_required
 def index():
+    load_dists()
     return render_template("index.html", dists=dists)
 
 @app.route("/login", methods=["GET", "POST"])
@@ -70,8 +75,6 @@ def register():
         password = request.form.get("password")
         confirmation = request.form.get("password_conf")
 
-        print(username, password, confirmation)
-
         if not username or not password or not confirmation:
             return render_error("Missing credentials!")
         
@@ -93,5 +96,20 @@ def signout():
     session.clear()
     return redirect("/")
 
+@app.route("/adddist")
+@login_required
+def adddist():
+    distance = request.args["distance"]
 
+    if not distance:
+        return render_error("Missing distance!")
+    
+    if not db.execute("SELECT * FROM distances WHERE user_id = ? AND distance = ?", session["user_id"], distance):
+        db.execute("INSERT INTO distances (user_id, distance) VALUES (?, ?)", session["user_id"], distance)
+        return redirect("/")
+    else:
+        return render_error("Distance already exists!")
+
+if __name__ == "__main__":
+    app.run(debug=True)
 

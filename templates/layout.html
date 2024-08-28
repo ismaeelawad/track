@@ -8,6 +8,7 @@
         <link href="../static/styles.css" rel="stylesheet">
         <script>
             var isSidebarOpen = false;
+            var isDistFormOpen = false;
             function sidebarToggle() {
                 if (isSidebarOpen)
                     closeNav();
@@ -26,6 +27,16 @@
                 document.getElementById("distSidebar").style.width = "0";
                 document.getElementById("main").style.marginLeft = "0";
             }
+
+            function adddistformToggle() {
+                if (isDistFormOpen) {
+                    document.getElementById("distForm").setAttribute("hidden", "true");
+                }
+                else {
+                    document.getElementById("distForm").removeAttribute("hidden");
+                }
+                isDistFormOpen = !isDistFormOpen;
+            }
         </script>
     </head>
     <body>
@@ -33,7 +44,13 @@
             {% for dist in dists %}
                 <a href="#">{{ dist }}</a>
             {% endfor %}
-            <a href="#">&plus; Add Distance</a>
+            <a href="javascript:adddistformToggle()">&plus; Add Distance</a>
+            <div class="adddistbutton" id="distForm" hidden>
+                <form action="/adddist">
+                    <input name="distance" type="text" autocomplete="off" placeholder="Distance">
+                    <button type="submit">Add</button>
+                </form>
+            </div>
         </div>
         <div id="TopBar" class="topbar">
             <button class="openbtn" onclick="sidebarToggle()">&#9776; Distances</button>
