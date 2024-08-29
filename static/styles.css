@@ -117,8 +117,8 @@ table {
     border-collapse: collapse;
     margin-right: auto;
     margin-left: auto;
-    width: 90%
-
+    width: 90%;
+    margin-top: 10px;
 }
 
 td {
@@ -203,5 +203,90 @@ tr:hover {
 }
 
 .register_button:hover {
+    background-color: var(--dark_blue);
+}
+
+.editbutton {
+    border: none;
+    width: 100%;
+    height: 100%;
+    font-size: 16pt;
+    color: white;
+    background-color: var(--light_blue);
+    transition: .5s;
+}
+
+.editbutton:hover {
+    background-color: var(--dark_blue);
+}
+
+.trashbutton {
+    border: none;
+    width: 100%;
+    height: 100%;
+    font-size: 16pt;
+    color: white;
+    background-color: #e93030;
+    transition: .5s;
+}
+.trashbutton:hover {
+    background-color: #c01010;
+}
+
+.addentrylink {
+    text-align: center;
+    text-decoration: none;
+    font-size: 16pt;
+    color: white;
+    background-color: var(--light_blue);
+    padding: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    width: 90%; 
+    transition: .5s;
+}
+
+.addentrylink:hover {
+    background-color: var(--dark_blue);
+}
+
+
+.entry_form input, select {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 16pt;
+    margin: auto;
+    display: block;
+    width: 25%;
+    margin-top: 10px;
+    border: 0px;
+    border-radius: 0px;
+    background-color: var(--light_gray);
+    outline: none;
+    padding: 5px;
+    transition: .5s;
+}
+
+.entry_form input:focus {
+    background-color: var(--dark_gray);
+    color: white;
+    border: 0px;
+}
+
+.entry_form button {
+    background-color: var(--light_blue);
+    font-size: 18pt;
+    color: white;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    border: none;
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    text-decoration: none;
+    transition: 0.5s;
+    padding: 5px;
+}
+
+.entry_form button:hover {
     background-color: var(--dark_blue);
 }

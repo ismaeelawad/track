@@ -110,6 +110,59 @@ def adddist():
     else:
         return render_error("Distance already exists!")
 
+@app.route("/log", methods=["GET", "POST"])
+@login_required
+def log():
+    times = db.execute("SELECT * FROM times WHERE times.user_id = ? ORDER BY id DESC", session["user_id"])
+    for time in times:
+        time["distance"] = db.execute("SELECT distance FROM distances WHERE id = ?", time["dist_id"])[0]["distance"]
+    load_dists()
+    return render_template("log.html", dists=dists, times=times)
+
+@app.route("/addentry", methods=["GET", "POST"])
+@login_required
+def addentry():
+    if request.method == "GET":
+        load_dists()
+        return render_template("addentry.html", dists=dists)
+    else:
+        distance = request.form.get("distance")
+        h = int(request.form.get("h"))
+        m = int(request.form.get("m"))
+        s = int(request.form.get("s"))
+        ms = int(request.form.get("ms"))
+        date = request.form.get("date")
+        notes = request.form.get("notes")
+
+        if not distance:
+            return render_error("Missing distance!")
+        
+        if not h:
+            h = 0
+        
+        if not m:
+            m = 0
+
+        if not s:
+            s = 0
+
+        if not ms:
+            ms = 0
+
+        if not date:
+            return render_error("Missing date!")
+        
+        if (h < 0) or (m < 0) or (m > 59) or (s < 0) or (s > 59) or (ms < 0) or (ms > 999):
+            return render_error("Invalid time!")
+        
+        dist_id = db.execute("SELECT id FROM distances WHERE user_id = ? AND distance = ?", session["user_id"], distance)[0]["id"]
+        if not dist_id:
+            return render_error("Distance does not exist!")
+
+        db.execute("INSERT INTO times (user_id, dist_id, h, m, s, ms, date, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], dist_id, h, m, s, ms, date, notes)
+        
+        return redirect("/log")
+
 if __name__ == "__main__":
     app.run(debug=True)
 

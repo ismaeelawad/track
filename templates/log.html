@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block title %} Log {% endblock %}
+
+{% block body %}
+    <h1>Log</h1>
+    <a class="addentrylink" href="/addentry">&plus; Add New Entry</a>
+    <table>
+        <thead class="heading">
+            <td>Distance</td>
+            <td>Time</td>
+            <td>Set On</td>
+            <td>Notes</td>
+            <td></td>
+            <td></td>
+        </thead>
+        {% for entry in times %}
+        <tr>
+            <td>{{ entry["distance"] }}</td>
+            <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
+            <td>{{ entry["date"] }}</td>
+            <td>{{ entry["notes"] }}</td>
+            <td>
+                <form action="/editentry">
+                    <input hidden value={{ entry["id"] }} name="id">
+                    <button class="editbutton" type="submit">&#9998;</button>
+                </form>
+            </td>
+            <td>
+                <form action="/deleteentry">
+                    <input hidden value={{ entry["id"] }} name="id">
+                    <button class="trashbutton" type="submit">&#10005;</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
