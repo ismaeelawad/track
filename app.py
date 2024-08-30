@@ -40,8 +40,12 @@ def load_dists():
 @app.route("/")
 @login_required
 def index():
+    username = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])[0]["username"]
+    times = db.execute("SELECT * FROM times WHERE user_id = ? ORDER BY date DESC LIMIT 5", session["user_id"])
+    for time in times:
+        time["distance"] = db.execute("SELECT distance FROM distances WHERE id = ?", time["dist_id"])[0]["distance"]
     load_dists()
-    return render_template("index.html", dists=dists)
+    return render_template("index.html", dists=dists, username=username, times=times)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -113,7 +117,7 @@ def adddist():
 @app.route("/log", methods=["GET", "POST"])
 @login_required
 def log():
-    times = db.execute("SELECT * FROM times WHERE times.user_id = ? ORDER BY id DESC", session["user_id"])
+    times = db.execute("SELECT * FROM times WHERE times.user_id = ? ORDER BY date DESC", session["user_id"])
     for time in times:
         time["distance"] = db.execute("SELECT distance FROM distances WHERE id = ?", time["dist_id"])[0]["distance"]
     load_dists()
@@ -127,10 +131,10 @@ def addentry():
         return render_template("addentry.html", dists=dists)
     else:
         distance = request.form.get("distance")
-        h = int(request.form.get("h"))
-        m = int(request.form.get("m"))
-        s = int(request.form.get("s"))
-        ms = int(request.form.get("ms"))
+        h = request.form.get("h")
+        m = request.form.get("m")
+        s = request.form.get("s")
+        ms = request.form.get("ms")
         date = request.form.get("date")
         notes = request.form.get("notes")
 
@@ -139,15 +143,23 @@ def addentry():
         
         if not h:
             h = 0
+        else:
+            h = int(h)
         
         if not m:
             m = 0
+        else:
+            m = int(m)
 
         if not s:
             s = 0
+        else:
+            s = int(s)
 
         if not ms:
             ms = 0
+        else:
+            ms = int(ms)
 
         if not date:
             return render_error("Missing date!")
@@ -162,6 +174,20 @@ def addentry():
         db.execute("INSERT INTO times (user_id, dist_id, h, m, s, ms, date, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], dist_id, h, m, s, ms, date, notes)
         
         return redirect("/log")
+    
+
+@app.route("/distance/<dist>")
+@login_required
+def distance(dist):
+    times = db.execute("SELECT times.id, times.user_id, h, m, s, ms, date, notes, dist_id FROM times JOIN distances ON times.dist_id = distances.id WHERE times.user_id = ? AND distance = ? ORDER BY date DESC", session["user_id"], dist)
+    xArray = []
+    yArray = []
+    for time in times:
+        time["distance"] = db.execute("SELECT distance FROM distances WHERE id = ?", time["dist_id"])[0]["distance"]
+        xArray.append(time["date"])
+        yArray.append(time["h"] * 3600 + time["m"] * 60 + time["s"] + time["ms"] / 1000)    
+    load_dists()
+    return render_template("distance.html", dists=dists, dist=dist, times=times, xArr=xArray, yArr=yArray)
 
 if __name__ == "__main__":
     app.run(debug=True)

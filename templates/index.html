@@ -1,25 +1,26 @@
 {% extends "layout.html" %}
 
-{% block title %} Index {% endblock %}
+{% block title %} Home {% endblock %}
 
 {% block body %}
-    <h1>Recent Times</h1>
+    <p id="welcome">Welcome, {{ username }}!</p>
+    <h2>Recent Times</h2>
     <table>
         <thead class="heading">
             <td>Distance</td>
             <td>Time</td>
             <td>Set On</td>
+            <td>Notes</td>
         </thead>
+        {% for entry in times %}
         <tr>
-            <td>400m</td>
-            <td>00:01:30.150</td>
-            <td>21/08/2024</td>
+            <td>{{ entry["distance"] }}</td>
+            <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
+            <td>{{ entry["date"] }}</td>
+            <td>{{ entry["notes"] }}</td>
         </tr>
-        <tr>
-            <td>10K</td>
-            <td>00:57:58.600</td>
-            <td>15/05/2024</td>
-        </tr>
+        {% endfor %}
     </table>
+    <h2>Your PRs</h2>
 
 {% endblock %}

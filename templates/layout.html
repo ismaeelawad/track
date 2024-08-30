@@ -38,11 +38,12 @@
                 isDistFormOpen = !isDistFormOpen;
             }
         </script>
+        {% block script %}{% endblock %}
     </head>
     <body>
         <div id="distSidebar" class="sidebar">
             {% for dist in dists %}
-                <a href="#">{{ dist }}</a>
+                <a href="/distance/{{ dist }}">{{ dist }}</a>
             {% endfor %}
             <a href="javascript:adddistformToggle()">&plus; Add Distance</a>
             <div class="adddistbutton" id="distForm" hidden>
@@ -54,11 +55,10 @@
         </div>
         <div id="TopBar" class="topbar">
             <button class="openbtn" onclick="sidebarToggle()">&#9776; Distances</button>
-            <a href="/">Home</a>
-            <a href="prs">PRs</a>
-            <a href="/goals">Goals</a>
-            <a href="/log">Log</a>
-            <a href="/signout" style="margin-right:5px;">Sign Out</a>
+            <a href="/"><button>Home</button></a>
+            <a href="/log"><button>Log</button></a>
+            <a href="/goals"><button>Goals</button></a>
+            <a href="/signout" style="float:right;"><button>Sign Out</button></a>
         </div>
         <div id="main">
             {% block body %}{% endblock %}

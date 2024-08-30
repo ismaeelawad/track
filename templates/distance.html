@@ -1,0 +1,49 @@
+{% extends "layout.html" %}
+
+{% block title %} {{ dist }} Times {% endblock %}
+
+{% block script %} <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> {% endblock %}
+
+{% block body %}
+    <h1>{{ dist }} Times</h1>
+    <div id="myPlot" style="width:100%;max-width:700px;margin-left:auto;margin-right:auto;z-index:-1;"></div>
+    <script>
+        const xArray = [{% for i in xArr %}"{{ i }}", {% endfor %}];
+        const yArray = [{% for i in yArr %}"{{ i }}", {% endfor %}];
+        
+        // Define Data
+        const data = [{
+          x: xArray,
+          y: yArray,
+          mode:"lines"
+        }];
+        
+        // Define Layout
+        const layout = {
+            yaxis: {title: "Time in Seconds"},
+            xaxis: {title: "Date"},
+          title: "{{ dist }} Progression"
+        };
+        
+        // Display using Plotly
+        Plotly.newPlot("myPlot", data, layout);
+        </script>
+        
+    <table>
+        <thead class="heading">
+            <td>Distance</td>
+            <td>Time</td>
+            <td>Set On</td>
+            <td>Notes</td>
+        </thead>
+        {% for entry in times %}
+        <tr>
+            <td>{{ entry["distance"] }}</td>
+            <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
+            <td>{{ entry["date"] }}</td>
+            <td>{{ entry["notes"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}
