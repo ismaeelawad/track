@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session, redirect
 from flask_session import Session
 from functools import wraps
 import hashlib
+import sys
 
 app = Flask(__name__)
 
@@ -37,15 +38,38 @@ def load_dists():
         if row["distance"] not in dists:
             dists.append(row["distance"])
 
+def dist_to_id(distance):
+    return db.execute("SELECT id FROM distances WHERE distance = ?", distance)[0]["id"]
+
+def id_to_dist(id):
+    return db.execute("SELECT distance FROM distances WHERE id = ?", id)[0]["distance"]
+
+def get_pr(distance):
+    r = db.execute("SELECT * FROM times WHERE dist_id = ? ORDER BY h ASC, m ASC, s ASC, ms ASC, date DESC", dist_to_id(distance))
+    if len(r) == 0:
+        return {}
+    return r[0]
+
 @app.route("/")
 @login_required
 def index():
     username = db.execute("SELECT username FROM users WHERE id = ?", session["user_id"])[0]["username"]
-    times = db.execute("SELECT * FROM times WHERE user_id = ? ORDER BY date DESC LIMIT 5", session["user_id"])
+
+    times = db.execute("SELECT * FROM times WHERE user_id = ? ORDER BY date DESC", session["user_id"])
     for time in times:
         time["distance"] = db.execute("SELECT distance FROM distances WHERE id = ?", time["dist_id"])[0]["distance"]
+
+    distances = db.execute("SELECT * FROM distances WHERE user_id = ?", session["user_id"])
+    prs=[]
+    for d in distances:
+        if get_pr(d["distance"]) != {}:
+            prs.append(get_pr(d["distance"]))
+    
+    for pr in prs:
+        pr["distance"] = db.execute("SELECT distance FROM distances WHERE id = ?", pr["dist_id"])[0]["distance"]
+    
     load_dists()
-    return render_template("index.html", dists=dists, username=username, times=times)
+    return render_template("index.html", dists=dists, username=username, times=times, prs=prs)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -174,7 +198,21 @@ def addentry():
         db.execute("INSERT INTO times (user_id, dist_id, h, m, s, ms, date, notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", session["user_id"], dist_id, h, m, s, ms, date, notes)
         
         return redirect("/log")
-    
+
+@app.route("/deleteentry", methods=["GET", "POST"])
+@login_required
+def deleteentry():
+    if request.method == "GET":
+        entry = db.execute("SELECT * FROM times WHERE id = ?", request.args.get("id"))[0]
+        entry["distance"] = db.execute("SELECT distance FROM distances WHERE user_id = ? AND id = ?", session["user_id"], entry["dist_id"])[0]["distance"]
+        load_dists()
+        return render_template("deleteentry.html", dists=dists, entry=entry)
+    else:
+        if hash_password(request.form.get("password")) == db.execute("SELECT pass_hash FROM users WHERE id = ?", session["user_id"])[0]["pass_hash"]:
+            db.execute("DELETE FROM times WHERE id = ?", request.form.get("id"))
+            return redirect("/log")
+        else:
+            return render_error("Wrong Password!")
 
 @app.route("/distance/<dist>")
 @login_required

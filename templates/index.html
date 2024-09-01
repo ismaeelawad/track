@@ -12,15 +12,31 @@
             <td>Set On</td>
             <td>Notes</td>
         </thead>
-        {% for entry in times %}
+        {% for i in range(0, 5) %}
         <tr>
-            <td>{{ entry["distance"] }}</td>
-            <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
-            <td>{{ entry["date"] }}</td>
-            <td>{{ entry["notes"] }}</td>
+            <td>{{ times[i]["distance"] }}</td>
+            <td>{{ '%02d' % times[i]["h"] }}:{{ '%02d' % times[i]["m"] }}:{{ '%02d' % times[i]["s"] }}.{{ '%03d' % times[i]["ms"] }}</td>
+            <td>{{ times[i]["date"] }}</td>
+            <td>{{ times[i]["notes"] }}</td>
         </tr>
         {% endfor %}
     </table>
     <h2>Your PRs</h2>
+    <table>
+        <thead class="heading">
+            <td>Distance</td>
+            <td>Time</td>
+            <td>Set On</td>
+            <td>Notes</td>
+        </thead>
+        {% for pr in prs %}
+        <tr>
+            <td>{{ pr["distance"] }}</td>
+            <td>{{ '%02d' % pr["h"] }}:{{ '%02d' % pr["m"] }}:{{ '%02d' % pr["s"] }}.{{ '%03d' % pr["ms"] }}</td>
+            <td>{{ pr["date"] }}</td>
+            <td>{{ pr["notes"] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
 {% endblock %}

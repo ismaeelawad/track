@@ -232,20 +232,6 @@ tr:hover {
     background-color: var(--dark_blue);
 }
 
-.editbutton {
-    border: none;
-    width: 100%;
-    height: 100%;
-    font-size: 16pt;
-    color: white;
-    background-color: var(--light_blue);
-    transition: .5s;
-}
-
-.editbutton:hover {
-    background-color: var(--dark_blue);
-}
-
 .trashbutton {
     border: none;
     width: 100%;
@@ -316,3 +302,49 @@ tr:hover {
 .entry_form button:hover {
     background-color: var(--dark_blue);
 }
+
+.delete_form {
+    margin: auto;
+    display: block;
+}
+
+.delete_form input {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 16pt;
+    margin: auto;
+    display: block;
+    width: 25%;
+    margin-top: 10px;
+    border: 0px;
+    border-radius: 0px;
+    background-color: var(--light_gray);
+    outline: none;
+    padding: 5px;
+    transition: .5s;
+}
+
+.delete_form input:focus {
+    background-color: var(--dark_gray);
+    color: white;
+    border: 0px;
+}
+
+.delete_form button {
+    background-color: #e93030;
+    color: white;
+    font-size: 18pt;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    border: none;
+    display:block;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: 0.5s;
+    padding: 5px;
+    width: 90%;
+}
+
+.delete_form button:hover {
+    background-color: #c01010;
+}
+

@@ -31,14 +31,12 @@
         
     <table>
         <thead class="heading">
-            <td>Distance</td>
             <td>Time</td>
             <td>Set On</td>
             <td>Notes</td>
         </thead>
         {% for entry in times %}
         <tr>
-            <td>{{ entry["distance"] }}</td>
             <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
             <td>{{ entry["date"] }}</td>
             <td>{{ entry["notes"] }}</td>
