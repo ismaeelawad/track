@@ -33,6 +33,7 @@ def hash_password(password):
 
 dists = []
 def load_dists():
+    dists.clear()
     rows = db.execute("SELECT distance FROM distances WHERE user_id = ?", session["user_id"])
     for row in rows:
         if row["distance"] not in dists:
@@ -223,9 +224,49 @@ def distance(dist):
     for time in times:
         time["distance"] = db.execute("SELECT distance FROM distances WHERE id = ?", time["dist_id"])[0]["distance"]
         xArray.append(time["date"])
-        yArray.append(time["h"] * 3600 + time["m"] * 60 + time["s"] + time["ms"] / 1000)    
+        yArray.append(time["h"] * 3600 + time["m"] * 60 + time["s"] + time["ms"] / 1000) 
+
+    pr = get_pr(dist)   
+
     load_dists()
-    return render_template("distance.html", dists=dists, dist=dist, times=times, xArr=xArray, yArr=yArray)
+    return render_template("distance.html", dists=dists, dist=dist, times=times, xArr=xArray, yArr=yArray, pr=pr)
+
+
+@app.route("/distance/<dist>/editname", methods=["GET", "POST"])
+@login_required
+def editname(dist):
+    if request.method == "GET":
+        load_dists()
+        return render_template("editname.html", dist=dist, dists=dists)
+    else:
+        if hash_password(request.form.get("password")) == db.execute("SELECT pass_hash FROM users WHERE id = ?", session["user_id"])[0]["pass_hash"]:
+            name = request.form.get("name")
+            if name in dists:
+                return render_error("Distance already exists!")
+            
+            db.execute("UPDATE distances SET distance = ? WHERE distance = ? AND user_id = ?", name, dist, session["user_id"])
+            if dist in dists:
+                dists.remove(dist)
+            return redirect("/distance/" + name)
+        else:
+            return render_error("Wrong Password!")
+    
+
+@app.route("/distance/<dist>/deletedistance", methods=["GET", "POST"])
+@login_required
+def deletedistance(dist):
+    if request.method == "GET":
+        load_dists()
+        return render_template("deletedistance.html", dist=dist, dists=dists)
+    else:
+        if hash_password(request.form.get("password")) == db.execute("SELECT pass_hash FROM users WHERE id = ?", session["user_id"])[0]["pass_hash"]:
+            db.execute("DELETE FROM times WHERE dist_id = ?", dist_to_id(dist))
+            db.execute("DELETE FROM distances WHERE distance = ?", dist)
+            if dist in dists:
+                dists.remove(dist)
+            return redirect("/")
+        else:
+            return render_error("Wrong Password!")
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %} Edit Name {% endblock %}
+
+{% block body %}
+    <h1>Edit {{ dist }}</h1>
+
+    <form class="edit_form" action="/distance/{{ dist }}/editname" method="post" autocomplete="off">
+        <input type="text" name="name" placeholder="New Name" autofocus autocomplete="off">
+        <input type="password" name="password" placeholder="Enter your password" autocomplete="off"> 
+        <button class="entry_form" type="submit">&#9998; Edit Distance Name</button>
+    </form>
+
+{% endblock %}

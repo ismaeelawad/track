@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block title %} Delete Distance {% endblock %}
+
+{% block body %}
+    <h1>Delete {{ dist }}</h1>
+    <h2>Are you sure you want to delete {{ dist }} and all its times?</h2>
+
+    <form class="delete_form" action="/distance/{{ dist }}/deletedistance" method="post">
+        <input type="password" name="password" placeholder="Enter your password" autocomplete="off"> 
+        <button class="trashbutton" type="submit">&#128465; Delete Distance</button>
+    </form>
+
+{% endblock %}

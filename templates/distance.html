@@ -6,6 +6,22 @@
 
 {% block body %}
     <h1>{{ dist }} Times</h1>
+    {% if pr == {} %}
+    <h2> No times yet!</h2>
+    {% else %}
+    <h2>Your PR</h2>
+    <table>
+        <thead class="heading">
+            <td>Time</td>
+            <td>Set On</td>
+            <td>Notes</td>
+        </thead>
+        <tr>
+            <td>{{ '%02d' % pr["h"] }}:{{ '%02d' % pr["m"] }}:{{ '%02d' % pr["s"] }}.{{ '%03d' % pr["ms"] }}</td>
+            <td>{{ pr["date"] }}</td>
+            <td>{{ pr["notes"] }}</td>
+        </tr>
+    </table>
     <div id="myPlot" style="width:100%;max-width:700px;margin-left:auto;margin-right:auto;z-index:-1;"></div>
     <script>
         const xArray = [{% for i in xArr %}"{{ i }}", {% endfor %}];
@@ -34,14 +50,27 @@
             <td>Time</td>
             <td>Set On</td>
             <td>Notes</td>
+            <td></td>
         </thead>
         {% for entry in times %}
         <tr>
             <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
             <td>{{ entry["date"] }}</td>
             <td>{{ entry["notes"] }}</td>
+            <td>
+                <form action="/deleteentry">
+                    <input hidden value={{ entry["id"] }} name="id">
+                    <button class="trashbutton" type="submit">&#10005;</button>
+                </form>
+            </td>
         </tr>
         {% endfor %}
     </table>
-
+    {% endif %}
+    <table style="width:90%; margin-left:auto; margin-right:auto; margin-top:10px;">
+        <tr>
+        <td style="width:50%;"><a href="/distance/{{ dist }}/editname" class="edittimelink">&#9998; Edit Distance Name</a></td>
+        <td style="width:50%;"><a href="/distance/{{ dist }}/deletedistance" class="deletetimelink">&#128465; Delete Distance</a></td>
+        </tr>
+    </table>
 {% endblock %}

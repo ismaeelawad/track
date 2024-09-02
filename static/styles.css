@@ -348,3 +348,80 @@ tr:hover {
     background-color: #c01010;
 }
 
+
+.edittimelink {
+    text-align: center;
+    text-decoration: none;
+    font-size: 20pt;
+    color: white;
+    background-color: var(--light_blue);
+    padding: 5px;
+    display: block;
+    width: 100%; 
+    transition: .5s;
+}
+
+.edittimelink:hover {
+    background-color: var(--dark_blue);
+}
+
+.deletetimelink {
+    text-align: center;
+    text-decoration: none;
+    font-size: 20pt;
+    color: white;
+    background-color: #e93030;
+    padding: 5px;
+    display: block;
+    width: 100%; 
+    transition: .5s;
+}
+
+.deletetimelink:hover {
+    background-color: #c01010;
+}
+
+.edit_form {
+    margin: auto;
+    display: block;
+}
+
+.edit_form input {
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    font-size: 16pt;
+    margin: auto;
+    display: block;
+    width: 25%;
+    margin-top: 10px;
+    border: 0px;
+    border-radius: 0px;
+    background-color: var(--light_gray);
+    outline: none;
+    padding: 5px;
+    transition: .5s;
+}
+
+.edit_form input:focus {
+    background-color: var(--dark_gray);
+    color: white;
+    border: 0px;
+}
+
+.edit_form button {
+    background-color: var(--light_blue);
+    color: white;
+    font-size: 18pt;
+    font-family: 'Helvetica Neue', 'Arial', sans-serif;
+    border: none;
+    display:block;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+    transition: 0.5s;
+    padding: 5px;
+    width: 90%;
+}
+
+.edit_form button:hover {
+    background-color: var(--dark_blue);
+}
