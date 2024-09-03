@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block title %} Goals {% endblock %}
+
+{% block body %}
+    <h1>Goals</h1>
+    <a class="addentrylink" href="/addgoal">&plus; Set New Goal</a>
+    <table>
+        <thead class="heading">
+            <td>Distance</td>
+            <td>Current PR</td>
+            <td>Goal</td>
+            <td>Due Date</td>
+            <td>Status</td>
+            <td>Notes</td>
+            <td></td>
+        </thead>
+        {% for goal in goals %}
+        <tr>
+            <td>{{ goal["distance"] }}</td>
+            <td>{{ goal["pr_time"] }}</td>
+            <td>{{ '%02d' % goal["h"] }}:{{ '%02d' % goal["m"] }}:{{ '%02d' % goal["s"] }}.{{ '%03d' % goal["ms"] }}</td>
+            <td>{{ goal["due_date"] }}</td>
+            <td>{{ goal["status_text"] }}</td>
+            <td>{{ goal["notes"] }}</td>
+            <td>
+                <form action="/deletegoal">
+                    <input hidden value={{ goal["id"] }} name="id">
+                    <button class="trashbutton" type="submit">&#10005;</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+
+{% endblock %}

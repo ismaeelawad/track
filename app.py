@@ -1,9 +1,9 @@
 from cs50 import SQL
+import datetime
 from flask import Flask, render_template, request, session, redirect
 from flask_session import Session
 from functools import wraps
 import hashlib
-import sys
 
 app = Flask(__name__)
 
@@ -40,7 +40,7 @@ def load_dists():
             dists.append(row["distance"])
 
 def dist_to_id(distance):
-    return db.execute("SELECT id FROM distances WHERE distance = ?", distance)[0]["id"]
+    return db.execute("SELECT id FROM distances WHERE distance = ? AND user_id = ?", distance, session["user_id"])[0]["id"]
 
 def id_to_dist(id):
     return db.execute("SELECT distance FROM distances WHERE id = ?", id)[0]["distance"]
@@ -267,6 +267,95 @@ def deletedistance(dist):
             return redirect("/")
         else:
             return render_error("Wrong Password!")
+
+@app.route("/goals")
+@login_required
+def goals():
+    goals = db.execute("SELECT * FROM goals WHERE user_id = ? ORDER BY status ASC, id DESC", session["user_id"])
+    for goal in goals:
+        goal["distance"] = id_to_dist(goal["dist_id"])
+        pr = get_pr(goal["distance"])
+        goal["pr_time"] = "%02d:%02d:%02d.%03d" % (pr["h"], pr["m"], pr["s"], pr["ms"])
+
+        if goal["status"] == 0:
+            goaltime = goal["h"] * 3600 + goal["m"] * 60 + goal["s"] + goal["ms"] / 1000
+            prtime = pr["h"] * 3600 + pr["m"] * 60 + pr["s"] + pr["ms"] / 1000
+
+            if prtime <= goaltime:
+                db.execute("UPDATE goals SET status = 1, completion_date = ? WHERE id = ?", pr["date"], goal["id"])
+                goal["completion_date"] = pr["date"]
+                goal["status_text"] = "Completed on " + goal["completion_date"]
+            else:
+                goal["status_text"] = "In Progress: "
+                due = datetime.datetime.strptime(goal["due_date"], "%Y-%m-%d")
+                # tod = datetime.datetime.today()
+                # REMOVE
+                tod = datetime.datetime.strptime("2024-09-06", "%Y-%m-%d")
+                remdays = due - tod
+                if remdays.days >= -1:
+                    goal["status_text"] += str(remdays.days + 1) + " " + ("day" if remdays.days + 1 == 1 else "days") + " remaining"
+                else:
+                    goal["status_text"] += str(abs(remdays.days + 1)) + " " + ("day" if abs(remdays.days + 1) == 1 else "days") + " overdue"
+        else:
+            goal["status_text"] = "Completed on " + goal["completion_date"]
+
+    load_dists()
+    return render_template("goals.html", dists=dists, goals=goals)
+
+@app.route("/addgoal", methods=["GET", "POST"])
+@login_required
+def addgoal():
+    if request.method == "GET":
+        load_dists()
+        return render_template("addgoal.html", dists=dists)
+    else:
+        distance = request.form.get("distance")
+        h = request.form.get("h")
+        m = request.form.get("m")
+        s = request.form.get("s")
+        ms = request.form.get("ms")
+        date = request.form.get("date")
+        notes = request.form.get("notes")
+
+        if not distance:
+            return render_error("Missing distance!")
+        
+        if not h:
+            h = 0
+        else:
+            h = int(h)
+        
+        if not m:
+            m = 0
+        else:
+            m = int(m)
+
+        if not s:
+            s = 0
+        else:
+            s = int(s)
+
+        if not ms:
+            ms = 0
+        else:
+            ms = int(ms)
+
+        if not date:
+            return render_error("Missing date!")
+        
+        if (datetime.datetime.strptime(date, "%Y-%m-%d") < datetime.datetime.today()):
+            return render_error("Invalid date!")
+        
+        if (h < 0) or (m < 0) or (m > 59) or (s < 0) or (s > 59) or (ms < 0) or (ms > 999):
+            return render_error("Invalid time!")
+        
+        dist_id = db.execute("SELECT id FROM distances WHERE user_id = ? AND distance = ?", session["user_id"], distance)[0]["id"]
+        if not dist_id:
+            return render_error("Distance does not exist!")
+
+        db.execute("INSERT INTO goals (user_id, dist_id, h, m, s, ms, due_date, notes, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)", session["user_id"], dist_id, h, m, s, ms, date, notes)
+        
+        return redirect("/goals")
 
 if __name__ == "__main__":
     app.run(debug=True)

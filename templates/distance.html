@@ -9,7 +9,7 @@
     {% if pr == {} %}
     <h2> No times yet!</h2>
     {% else %}
-    <h2>Your PR</h2>
+    <h2>&#10024;Your PR&#10024;</h2>
     <table>
         <thead class="heading">
             <td>Time</td>
@@ -54,7 +54,9 @@
         </thead>
         {% for entry in times %}
         <tr>
-            <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
+            <td>
+                {{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}
+            </td>
             <td>{{ entry["date"] }}</td>
             <td>{{ entry["notes"] }}</td>
             <td>

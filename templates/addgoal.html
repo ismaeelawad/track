@@ -1,0 +1,23 @@
+{% extends "layout.html" %}
+
+{% block title %} Set New Goal {% endblock %}
+
+{% block body %}
+    <h1>Set New Goal</h1>
+        <form method="post" class="entry_form">
+            <select name="distance" id="distance" autocomplete="off">
+                <option disabled selected="selected">Distance</option>
+                {% for dist in dists %}
+                <option value="{{ dist }}">{{ dist }}</option>
+                {% endfor %}
+            </select>
+            <input type="number" name="h" id="h" min="0" autocomplete="off" placeholder="Hrs">
+            <input type="number" name="m" id="m" min="0" max="59" autocomplete="off" placeholder="Min">
+            <input type="number" name="s" id="s" min="0" max="59" autocomplete="off" placeholder="Sec">
+            <input type="number" name="ms" id="ms" min="0" max= "999" autocomplete="off" placeholder="Ms"><br>
+            <input type="date" id="date" name="date" placeholder="Due Date">
+            <input type="text" id="notes" name="notes" placeholder="Notes">
+
+            <button type="submit">Set Goal</button>
+        </form>
+{% endblock %}
