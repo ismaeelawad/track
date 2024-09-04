@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block title %} Delete Goal {% endblock %}
+
+{% block body %}
+    <h1>Delete Goal?</h1>
+    <table>
+        <thead class="heading">
+            <td>Distance</td>
+            <td>Goal</td>
+            <td>Due Date</td>
+            <!-- <td>Notes</td> -->
+        </thead>
+        <tr>
+            <td>{{ goal["distance"] }}</td>
+            <td>{{ '%02d' % goal["h"] }}:{{ '%02d' % goal["m"] }}:{{ '%02d' % goal["s"] }}.{{ '%03d' % goal["ms"] }}</td>
+            <td>{{ goal["due_date"] }}</td>
+            <!-- <td>{{ goal["notes"] }}</td> -->
+        </tr>
+    </table>
+
+    <form class="delete_form" action="/deletegoal" method="post">
+        <input hidden value={{ goal["id"] }} name="id" style="display:none;">
+        <input type="password" name="password" placeholder="Enter your password" autocomplete="off"> 
+        <button class="trashbutton" style="float:none;" type="submit">&#10005; Delete Goal</button>
+    </form>
+
+{% endblock %}

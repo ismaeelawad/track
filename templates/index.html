@@ -4,22 +4,35 @@
 
 {% block body %}
     <p id="welcome">Welcome, {{ username }}!</p>
+    {% if times != [] %}
     <h2>Recent Times</h2>
     <table>
         <thead class="heading">
             <td>Distance</td>
             <td>Time</td>
             <td>Set On</td>
-            <td>Notes</td>
+            <!-- <td>Notes</td> -->
         </thead>
-        {% for i in range(0, 5) %}
-        <tr>
-            <td>{{ times[i]["distance"] }}</td>
-            <td>{{ '%02d' % times[i]["h"] }}:{{ '%02d' % times[i]["m"] }}:{{ '%02d' % times[i]["s"] }}.{{ '%03d' % times[i]["ms"] }}</td>
-            <td>{{ times[i]["date"] }}</td>
-            <td>{{ times[i]["notes"] }}</td>
-        </tr>
-        {% endfor %}
+        {% if times|length >= 5 %}
+            {% for i in range(0, 5) %}
+            <tr>
+                <td>{{ times[i]["distance"] }}</td>
+                <td>{{ '%02d' % times[i]["h"] }}:{{ '%02d' % times[i]["m"] }}:{{ '%02d' % times[i]["s"] }}.{{ '%03d' % times[i]["ms"] }}</td>
+                <td>{{ times[i]["date"] }}</td>
+                <!-- <td>{{ times[i]["notes"] }}</td> -->
+            </tr>
+            {% endfor %}
+        {% else %}
+            {% for time in times %}
+            <tr>
+                <td>{{ time["distance"] }}</td>
+                <td>{{ '%02d' % time["h"] }}:{{ '%02d' % time["m"] }}:{{ '%02d' % time["s"] }}.{{ '%03d' % time["ms"] }}</td>
+                <td>{{ time["date"] }}</td>
+                <!-- <td>{{ time["notes"] }}</td> -->
+            </tr>
+            {% endfor %}
+        {% endif %}
+
     </table>
     <h2>Your PRs</h2>
     <table>
@@ -27,16 +40,23 @@
             <td>Distance</td>
             <td>Time</td>
             <td>Set On</td>
-            <td>Notes</td>
+            <!-- <td>Notes</td> -->
         </thead>
         {% for pr in prs %}
         <tr>
             <td>{{ pr["distance"] }}</td>
             <td>{{ '%02d' % pr["h"] }}:{{ '%02d' % pr["m"] }}:{{ '%02d' % pr["s"] }}.{{ '%03d' % pr["ms"] }}</td>
             <td>{{ pr["date"] }}</td>
-            <td>{{ pr["notes"] }}</td>
+            <!-- <td>{{ pr["notes"] }}</td> -->
         </tr>
         {% endfor %}
     </table>
+    {% else %}
+        {% if dists == [] %}
+            <h2 style="color:var(--light_blue)">Click on &#9776; Distances to add a new distance!</h2>
+        {% else %}
+            <h2 style="color:var(--light_blue)">Click on Log to start adding new times!</h2>
+        {% endif %}
+    {% endif %}
 
 {% endblock %}

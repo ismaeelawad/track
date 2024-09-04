@@ -234,8 +234,9 @@ tr:hover {
 }
 
 .trashbutton {
+    float: right;
     border: none;
-    width: 100%;
+    width: 40px;
     height: 100%;
     font-size: 16pt;
     color: white;
@@ -425,4 +426,16 @@ tr:hover {
 
 .edit_form button:hover {
     background-color: var(--dark_blue);
+}
+
+.tr_complete {
+    background-color: rgb(146, 235, 119);
+}
+
+.tr_overdue {
+    background-color: rgb(253, 220, 131);
+}
+
+.tr_progress {
+    background-color: rgb(177, 215, 247);
 }

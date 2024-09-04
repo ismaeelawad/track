@@ -260,8 +260,9 @@ def deletedistance(dist):
         return render_template("deletedistance.html", dist=dist, dists=dists)
     else:
         if hash_password(request.form.get("password")) == db.execute("SELECT pass_hash FROM users WHERE id = ?", session["user_id"])[0]["pass_hash"]:
-            db.execute("DELETE FROM times WHERE dist_id = ?", dist_to_id(dist))
-            db.execute("DELETE FROM distances WHERE distance = ?", dist)
+            db.execute("DELETE FROM times WHERE dist_id = ? AND user_id = ?", dist_to_id(dist), session["user_id"])
+            db.execute("DELETE FROM goals WHERE dist_id = ? AND user_id = ?", dist_to_id(dist), session["user_id"])
+            db.execute("DELETE FROM distances WHERE distance = ? AND user_id = ?", dist, session["user_id"])
             if dist in dists:
                 dists.remove(dist)
             return redirect("/")
@@ -271,6 +272,8 @@ def deletedistance(dist):
 @app.route("/goals")
 @login_required
 def goals():
+    if db.execute("SELECT * FROM times WHERE user_id = ?", session["user_id"]) == []:
+        return render_error("Please add times first!")
     goals = db.execute("SELECT * FROM goals WHERE user_id = ? ORDER BY status ASC, id DESC", session["user_id"])
     for goal in goals:
         goal["distance"] = id_to_dist(goal["dist_id"])
@@ -285,6 +288,7 @@ def goals():
                 db.execute("UPDATE goals SET status = 1, completion_date = ? WHERE id = ?", pr["date"], goal["id"])
                 goal["completion_date"] = pr["date"]
                 goal["status_text"] = "Completed on " + goal["completion_date"]
+                goal["class"] = "tr_complete"
             else:
                 goal["status_text"] = "In Progress: "
                 due = datetime.datetime.strptime(goal["due_date"], "%Y-%m-%d")
@@ -294,10 +298,13 @@ def goals():
                 remdays = due - tod
                 if remdays.days >= -1:
                     goal["status_text"] += str(remdays.days + 1) + " " + ("day" if remdays.days + 1 == 1 else "days") + " remaining"
+                    goal["class"] = "tr_progress"
                 else:
                     goal["status_text"] += str(abs(remdays.days + 1)) + " " + ("day" if abs(remdays.days + 1) == 1 else "days") + " overdue"
+                    goal["class"] = "tr_overdue"
         else:
             goal["status_text"] = "Completed on " + goal["completion_date"]
+            goal["class"] = "tr_complete"
 
     load_dists()
     return render_template("goals.html", dists=dists, goals=goals)
@@ -356,6 +363,21 @@ def addgoal():
         db.execute("INSERT INTO goals (user_id, dist_id, h, m, s, ms, due_date, notes, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 0)", session["user_id"], dist_id, h, m, s, ms, date, notes)
         
         return redirect("/goals")
+
+@app.route("/deletegoal", methods=["GET", "POST"])
+@login_required
+def deletegoal():
+    if request.method == "GET":
+        goal = db.execute("SELECT * FROM goals WHERE id = ?", request.args.get("id"))[0]
+        goal["distance"] = db.execute("SELECT distance FROM distances WHERE user_id = ? AND id = ?", session["user_id"], goal["dist_id"])[0]["distance"]
+        load_dists()
+        return render_template("deletegoal.html", dists=dists, goal=goal)
+    else:
+        if hash_password(request.form.get("password")) == db.execute("SELECT pass_hash FROM users WHERE id = ?", session["user_id"])[0]["pass_hash"]:
+            db.execute("DELETE FROM goals WHERE id = ?", request.form.get("id"))
+            return redirect("/goals")
+        else:
+            return render_error("Wrong Password!")
 
 if __name__ == "__main__":
     app.run(debug=True)

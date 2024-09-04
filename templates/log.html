@@ -10,7 +10,7 @@
             <td>Distance</td>
             <td>Time</td>
             <td>Set On</td>
-            <td>Notes</td>
+            <!-- <td>Notes</td> -->
             <td></td>
         </thead>
         {% for entry in times %}
@@ -18,7 +18,7 @@
             <td>{{ entry["distance"] }}</td>
             <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
             <td>{{ entry["date"] }}</td>
-            <td>{{ entry["notes"] }}</td>
+            <!-- <td>{{ entry["notes"] }}</td> -->
             <td>
                 <form action="/deleteentry">
                     <input hidden value={{ entry["id"] }} name="id">

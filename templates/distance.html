@@ -8,18 +8,19 @@
     <h1>{{ dist }} Times</h1>
     {% if pr == {} %}
     <h2> No times yet!</h2>
+    <h2 style="color:var(--light_blue)">Click on Log to start adding new times!</h2>
     {% else %}
     <h2>&#10024;Your PR&#10024;</h2>
     <table>
         <thead class="heading">
             <td>Time</td>
             <td>Set On</td>
-            <td>Notes</td>
+            <!-- <td>Notes</td> -->
         </thead>
         <tr>
             <td>{{ '%02d' % pr["h"] }}:{{ '%02d' % pr["m"] }}:{{ '%02d' % pr["s"] }}.{{ '%03d' % pr["ms"] }}</td>
             <td>{{ pr["date"] }}</td>
-            <td>{{ pr["notes"] }}</td>
+            <!-- <td>{{ pr["notes"] }}</td> -->
         </tr>
     </table>
     <div id="myPlot" style="width:100%;max-width:700px;margin-left:auto;margin-right:auto;z-index:-1;"></div>
@@ -49,7 +50,7 @@
         <thead class="heading">
             <td>Time</td>
             <td>Set On</td>
-            <td>Notes</td>
+            <!-- <td>Notes</td> -->
             <td></td>
         </thead>
         {% for entry in times %}
@@ -58,7 +59,7 @@
                 {{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}
             </td>
             <td>{{ entry["date"] }}</td>
-            <td>{{ entry["notes"] }}</td>
+            <!-- <td>{{ entry["notes"] }}</td> -->
             <td>
                 <form action="/deleteentry">
                     <input hidden value={{ entry["id"] }} name="id">

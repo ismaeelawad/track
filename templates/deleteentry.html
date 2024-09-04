@@ -3,27 +3,27 @@
 {% block title %} Delete Entry {% endblock %}
 
 {% block body %}
-    <h1>Delete Entry</h1>
+    <h1>Delete Entry?</h1>
     <table>
         <thead class="heading">
             <td>Distance</td>
             <td>Time</td>
             <td>Set On</td>
-            <td>Notes</td>
+            <!-- <td>Notes</td> -->
             <td></td>
         </thead>
         <tr>
             <td>{{ entry["distance"] }}</td>
             <td>{{ '%02d' % entry["h"] }}:{{ '%02d' % entry["m"] }}:{{ '%02d' % entry["s"] }}.{{ '%03d' % entry["ms"] }}</td>
             <td>{{ entry["date"] }}</td>
-            <td>{{ entry["notes"] }}</td>
+            <!-- <td>{{ entry["notes"] }}</td> -->
         </tr>
     </table>
 
     <form class="delete_form" action="/deleteentry" method="post">
         <input hidden value={{ entry["id"] }} name="id" style="display:none;">
         <input type="password" name="password" placeholder="Enter your password" autocomplete="off"> 
-        <button class="trashbutton" type="submit">&#10005; Delete Entry</button>
+        <button class="trashbutton" style="float:none;" type="submit">&#10005; Delete Entry</button>
     </form>
 
 {% endblock %}
