@@ -292,9 +292,7 @@ def goals():
             else:
                 goal["status_text"] = "In Progress: "
                 due = datetime.datetime.strptime(goal["due_date"], "%Y-%m-%d")
-                # tod = datetime.datetime.today()
-                # REMOVE
-                tod = datetime.datetime.strptime("2024-09-06", "%Y-%m-%d")
+                tod = datetime.datetime.today()
                 remdays = due - tod
                 if remdays.days >= -1:
                     goal["status_text"] += str(remdays.days + 1) + " " + ("day" if remdays.days + 1 == 1 else "days") + " remaining"
