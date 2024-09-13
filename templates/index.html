@@ -3,6 +3,7 @@
 {% block title %} Home {% endblock %}
 
 {% block body %}
+    <img src="{{ url_for('static', filename='track.png') }}" style="height:50px;display:block;margin-left:auto;margin-right:auto;">
     <p id="welcome">Welcome, {{ username }}!</p>
     {% if times != [] %}
     <h2>Recent Times</h2>
