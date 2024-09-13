@@ -1,6 +1,5 @@
 # track
 ### [Video Demo]()
-![track logo](https://github.com/ismaeelawad/CS50Xproject/blob/master/static/track.png?raw=true)
 #### Description:
   **track** is a web app that allows you to record your times for running _(or really any timed sport)_. It automatically calculates your personal records, allows you to see a graph of your progress, and you can even set goals for yourself.
 
