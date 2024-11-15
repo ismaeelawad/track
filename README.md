@@ -24,7 +24,7 @@ It also uses Plotly.js to render graphs.
 ## Usage
 ### Starting the app
 #### PythonAnywhere
-You can click [here](https://ismaeel.pythonanywhere.com/) to visit the version of the web app hosted on PythonAnywhere's server. I'm not entrirely sure if this will remain online forever, so you might find that it has changed or went down if you're veiwing this in the far future.
+You can click [here](https://ismaeel.pythonanywhere.com/) to visit the version of the web app hosted on PythonAnywhere's server. I'm not entrirely sure if this will remain online forever, so you might find that it has changed or went down if you're viewing this in the far future.
 
 #### Locally
 You can easily run a local version on your computer by cloning the repo and installing all the requirements in the Technical Details section. You then just run `app.py` and click the link that it outputs to the console. The database already comes with an account with the username **user** and the password **123** if you want to mess around.
