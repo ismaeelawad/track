@@ -1,5 +1,5 @@
 # track
-### [Video Demo]()
+### [Video Demo](https://youtu.be/IziL7g-OZ3I)
 #### Description:
   **track** is a web app that allows you to record your times for running _(or really any timed sport)_. It automatically calculates your personal records, allows you to see a graph of your progress, and you can even set goals for yourself.
 
@@ -14,6 +14,12 @@ The modules used are:
   - and `hashlib` to hash passwords for storage.
 
 It also uses Plotly.js to render graphs.
+
+##### Files:
+- `app.py` the Python code for the web app.
+- `project.db` database containing the users, times, goals, etc..
+- `static/` contains the logo, favicons and CSS stylesheet.
+- `templates/` contains the .html files for the web pages.
 
 ## Usage
 ### Starting the app
